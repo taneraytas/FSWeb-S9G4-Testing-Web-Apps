@@ -127,6 +127,6 @@ const IletisimFormu = () => {
       </form>
     </div>
   );
-};
+}
 
 export default IletisimFormu;
