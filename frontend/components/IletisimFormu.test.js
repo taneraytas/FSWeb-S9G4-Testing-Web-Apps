@@ -54,8 +54,34 @@ test('geçersiz bir mail girildiğinde "email geçerli bir email adresi olmalıd
   );
 });
 
-test('soyad girilmeden gönderilirse "soyad gereklidir." mesajı render ediliyor', async () => {});
+test('soyad girilmeden gönderilirse "soyad gereklidir." mesajı render ediliyor', async () => {
+  render(<IletisimFormu />);
+  const isimInput = screen.getByLabelText("Ad*");
+  const emailInput = screen.getByLabelText("Email*");
+  const btn = screen.getByRole("button", "submit");
 
-test("ad,soyad, email render ediliyor. mesaj bölümü doldurulmadığında hata mesajı render edilmiyor.", async () => {});
+  userEvent.type(isimInput, "John Doe");
+  userEvent.type(emailInput, "asdasdasdas@hotmail.com");
+  userEvent.click(btn);
+
+  expect(screen.getByTestId("error")).toHaveTextContent(
+    "Hata: soyad gereklidir."
+  );
+});
+
+test("ad,soyad, email render ediliyor. mesaj bölümü doldurulmadığında hata mesajı render edilmiyor.", async () => {
+  render(<IletisimFormu />);
+  const isimInput = screen.getByLabelText("Ad*");
+  const soyisimInput = screen.getByLabelText("Soyad*");
+  const emailInput = screen.getByLabelText("Email*");
+  const btn = screen.getByRole("button", "submit");
+
+  userEvent.type(isimInput, "John Doe");
+  userEvent.type(soyisimInput, "Surname");
+  userEvent.type(emailInput, "asdasdasdas@hotmail.com");
+  userEvent.click(btn);
+
+  expect(screen.queryAllByTestId("error")).toHaveLength(0);
+});
 
 test("form gönderildiğinde girilen tüm değerler render ediliyor.", async () => {});
